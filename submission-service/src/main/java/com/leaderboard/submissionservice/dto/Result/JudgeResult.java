@@ -1,4 +1,4 @@
-package com.leaderboard.submissionservice.dto;
+package com.leaderboard.submissionservice.dto.Result;
 
 import com.leaderboard.submissionservice.domain.emun.SubmissionStatus;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.leaderboard.submissionservice.dto;
+package com.leaderboard.submissionservice.dto.Request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

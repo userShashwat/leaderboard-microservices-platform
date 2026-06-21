@@ -1,25 +1,23 @@
-package com.leaderboard.submissionservice.dto;
+package com.leaderboard.submissionservice.dto.Response;
 
 import com.leaderboard.submissionservice.domain.emun.Difficulty;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
-public class CreateProblemRequest {
-    @NotBlank
+@Builder
+public class ProblemResponse {
+    private Long id;
+
     private String title;
 
-    @NotBlank
     private String description;
 
-    @NotNull
     private Difficulty difficulty;
 
-    @NotNull
     private Integer maxScore;
+
+    private Long contestId;
     private String sampleInput;
 
     private String sampleOutput;
