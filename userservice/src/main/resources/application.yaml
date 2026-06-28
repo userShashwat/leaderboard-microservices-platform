@@ -6,9 +6,9 @@ spring:
     name: user-service
 
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}
-    username: ${MYSQL_USERNAME}
-    password: ${MYSQL_PASSWORD}
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:leaderboard_db}
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:shashwat@16}
 
   jpa:
     hibernate:
@@ -18,12 +18,19 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_SERVER}
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka/}
 
 jwt:
-  secret: dGhpcyBpcyBhIHZlcnkgbG9uZyBhbmQgc2VjdXJlIHNlY3JldCBrZXk=
+  secret: YOUR_SECRET
 
 default-admin:
   username: admin
   email: admin@example.com
   password: admin123
+
+springdoc:
+  api-docs:
+    path: /api-docs
+
+  swagger-ui:
+    path: /swagger-ui.html

@@ -118,7 +118,9 @@ public class LeaderboardServiceImpl implements LeaderboardService{
                 leaderboardRepository.findByContestIdAndUserId(
                         event.getContestId(),
                         event.getUserId()
-                ).orElseThrow();
+                ).orElseThrow(
+                        () -> new RuntimeException("Leaderboard entry not found")
+                );
 
         leaderboard.setTotalScore(
                 leaderboard.getTotalScore() + difference
