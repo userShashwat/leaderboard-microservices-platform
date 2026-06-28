@@ -2,8 +2,8 @@ package com.leaderboard.submissionservice.controller;
 
 import com.leaderboard.submissionservice.Exception.UnauthorizedException;
 import com.leaderboard.submissionservice.common.ApiResponse;
-import com.leaderboard.submissionservice.dto.CreateProblemRequest;
-import com.leaderboard.submissionservice.dto.ProblemResponse;
+import com.leaderboard.submissionservice.dto.Request.CreateProblemRequest;
+import com.leaderboard.submissionservice.dto.Response.ProblemResponse;
 import com.leaderboard.submissionservice.service.ProblemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.leaderboard.submissionservice.service;
 
-import com.leaderboard.submissionservice.dto.CreateSubmissionRequest;
-import com.leaderboard.submissionservice.dto.SubmissionResponse;
+import com.leaderboard.submissionservice.dto.Request.CreateSubmissionRequest;
+import com.leaderboard.submissionservice.dto.Response.SubmissionResponse;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
 package com.leaderboard.submissionservice.controller;
 
 import com.leaderboard.submissionservice.common.ApiResponse;
-import com.leaderboard.submissionservice.dto.CreateSubmissionRequest;
-import com.leaderboard.submissionservice.dto.SubmissionResponse;
+import com.leaderboard.submissionservice.dto.Request.CreateSubmissionRequest;
+import com.leaderboard.submissionservice.dto.Response.SubmissionResponse;
 import com.leaderboard.submissionservice.service.SubmissionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

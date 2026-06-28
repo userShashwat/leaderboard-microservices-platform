@@ -8,7 +8,6 @@ spring:
   cloud:
     gateway:
       routes:
-
         - id: user-service
           uri: lb://user-service
           predicates:
@@ -19,24 +18,25 @@ spring:
           predicates:
             - Path=/api/contests/**,/api/problems/**,/api/submissions/**
 
-
+        - id: leaderboard-service
+          uri: lb://leaderboard-service
+          predicates:
+            - Path=/api/leaderboard/**
 
 eureka:
-  instance:
-    ip-address: 127.0.0.1
-    prefer-ip-address: true
-
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_SERVER}
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info,gateway,routes
+
   endpoint:
     gateway:
       enabled: true
+
 jwt:
   secret: dGhpcyBpcyBhIHZlcnkgbG9uZyBhbmQgc2VjdXJlIHNlY3JldCBrZXk=

@@ -2,13 +2,15 @@ package com.leaderboard.submissionservice.service.impl;
 
 import com.leaderboard.submissionservice.Exception.ProblemNotFoundException;
 import com.leaderboard.submissionservice.domain.Problem;
+import com.leaderboard.submissionservice.domain.ScoreEvent;
 import com.leaderboard.submissionservice.domain.Submission;
 import com.leaderboard.submissionservice.domain.emun.SubmissionStatus;
-import com.leaderboard.submissionservice.event.SubmissionCreatedEvent;
-import org.springframework.context.ApplicationEventPublisher;
-import com.leaderboard.submissionservice.dto.CreateSubmissionRequest;
-import com.leaderboard.submissionservice.dto.JudgeResult;
-import com.leaderboard.submissionservice.dto.SubmissionResponse;
+
+
+import com.leaderboard.submissionservice.dto.Request.CreateSubmissionRequest;
+import com.leaderboard.submissionservice.dto.Response.SubmissionResponse;
+import com.leaderboard.submissionservice.dto.Result.JudgeResult;
+import com.leaderboard.submissionservice.kafka.SubmissionEventProducer;
 import com.leaderboard.submissionservice.repository.ProblemRepository;
 import com.leaderboard.submissionservice.repository.SubmissionRepository;
 import com.leaderboard.submissionservice.service.JudgeService;
@@ -22,9 +24,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class SubmissionServiceImpl implements SubmissionService {
-    private final ApplicationEventPublisher eventPublisher;
+
     private final SubmissionRepository submissionRepository;
-    //private final JudgeService judgeService;
+    private final JudgeService judgeService;
+    private final SubmissionEventProducer submissionEventProducer;
     private final ProblemRepository problemRepository;
     private SubmissionResponse mapToResponse(Submission submission) {
         return SubmissionResponse.builder()
@@ -37,23 +40,33 @@ public class SubmissionServiceImpl implements SubmissionService {
                 .build();
     }
     @Override
-    public SubmissionResponse submitSolution(Long problemId, Long userId, String username, CreateSubmissionRequest request) {
-        Problem problem= problemRepository.findById(problemId)
-                .orElseThrow(()-> new ProblemNotFoundException("not found"));
+    public SubmissionResponse submitSolution(Long problemId, Long userId, String username, CreateSubmissionRequest request
+    ) {
 
-        Submission submission=Submission.builder()
-                .userId(userId)
-                .username(username)
-                .problem(problem)
-                .code(request.getCode())
-                .status(
-                        SubmissionStatus.PENDING
-                )
-                .score(0)
-                .build();
+        Problem problem = problemRepository.findById(problemId).orElseThrow(() -> new ProblemNotFoundException("Problem not found"));
+
+        JudgeResult result = judgeService.judge(request.getCode());
+
+        Submission submission = Submission.builder()
+                        .problem(problem)
+                        .userId(userId)
+                        .username(username)
+                        .code(request.getCode())
+                        .status(result.getStatus())
+                        .score(result.getScore())
+                        .build();
         Submission savedSubmission = submissionRepository.save(submission);
-        eventPublisher.publishEvent(new SubmissionCreatedEvent(savedSubmission.getId()));
-        log.info("Submission created {}", submission.getId());
+        ScoreEvent scoreEvent = ScoreEvent.builder()
+                        .submissionId(savedSubmission.getId())
+                        .contestId(problem.getContest().getId())
+                        .problemId(problem.getId())
+                        .userId(userId)
+                        .username(username)
+                        .score(result.getScore())
+                        .status(result.getStatus().name())
+                        .build();
+        submissionEventProducer.publish(scoreEvent);
+        log.info("Submission {} processed", savedSubmission.getId());
         return mapToResponse(savedSubmission);
     }
 

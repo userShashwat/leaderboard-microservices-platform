@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaderboard WebSocket Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+
+    <script src="https://unpkg.com/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+    <style>
+        body{
+            font-family: Arial;
+            margin:40px;
+        }
+        h2{
+            color:#444;
+        }
+        #status{
+            color:green;
+            font-weight:bold;
+        }
+        table{
+            border-collapse:collapse;
+            width:500px;
+            margin-top:20px;
+        }
+        th,td{
+            border:1px solid #ccc;
+            padding:10px;
+            text-align:center;
+        }
+        th{
+            background:#f3f3f3;
+        }
+    </style>
+</head>
+<body>
+<h2>Real Time Leaderboard</h2>
+<p id="status">Disconnected</p>
+<button onclick="connect()">Connect</button>
+<table>
+    <thead>
+    <tr>
+        <th>Rank</th>
+        <th>User</th>
+        <th>Score</th>
+    </tr>
+    </thead>
+    <tbody id="leaderboard">
+    </tbody>
+</table>
+<script>
+    let client;
+
+function connect() {
+
+    const socket = new SockJS("http://localhost:8083/ws");
+
+    client = new StompJs.Client({
+
+        webSocketFactory: () => socket,
+
+        reconnectDelay: 5000,
+
+        debug: (msg) => console.log(msg),
+
+        onConnect: () => {
+
+            document.getElementById("status").innerHTML = "Connected";
+
+            console.log("Connected");
+
+            client.subscribe(
+                "/topic/leaderboard/1",
+                 (message) => {
+
+                 console.log("MESSAGE RECEIVED");
+                  console.log(message.body);
+
+                       const leaderboard = JSON.parse(message.body);
+
+               console.log(leaderboard);
+
+                  updateTable(leaderboard);
+
+    }
+);
+
+        },
+
+        onStompError: (frame) => {
+
+            console.error(frame);
+
+        }
+
+    });
+
+    client.activate();
+
+}
+
+function updateTable(leaderboard) {
+
+    const tbody =
+        document.getElementById("leaderboard");
+
+    tbody.innerHTML = "";
+
+    leaderboard.forEach(user => {
+
+        tbody.innerHTML += `
+            <tr>
+                <td>${user.rank}</td>
+                <td>${user.username}</td>
+                <td>${user.totalScore}</td>
+            </tr>
+        `;
+
+    });
+
+}
+</script>
+
+</body>
+
+</html>

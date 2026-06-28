@@ -1,0 +1,219 @@
+name: notification-project
+
+services:
+
+  mysql:
+    image: mysql:8.4
+    container_name: mysql
+    restart: unless-stopped
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_HOST: "%"
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+    networks:
+      - notification-network
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: unless-stopped
+
+    ports:
+      - "6379:6379"
+
+    networks:
+      - notification-network
+
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: kafka
+    restart: unless-stopped
+
+    ports:
+      - "9092:9092"
+
+    environment:
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+    networks:
+      - notification-network
+
+
+  eureka-server:
+    build:
+      context: ./eureka-server
+
+    container_name: eureka-server
+    restart: unless-stopped
+
+    ports:
+      - "8761:8761"
+
+    networks:
+      - notification-network
+
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8761/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+
+
+  userservice:
+    build:
+      context: ./userservice
+
+    container_name: userservice
+    restart: unless-stopped
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+
+    environment:
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+      EUREKA_SERVER: ${EUREKA_SERVER}
+
+    ports:
+      - "8081:8081"
+
+    networks:
+      - notification-network
+
+
+  submission-service:
+    build:
+      context: ./submission-service
+
+    container_name: submission-service
+    restart: unless-stopped
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+      eureka-server:
+        condition: service_healthy
+
+    environment:
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+
+      EUREKA_SERVER: ${EUREKA_SERVER}
+
+    ports:
+      - "8082:8082"
+
+    networks:
+      - notification-network
+
+
+  leaderboard-service:
+    build:
+      context: ./leaderboard-service
+
+    container_name: leaderboard-service
+    restart: unless-stopped
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      kafka:
+        condition: service_started
+      eureka-server:
+        condition: service_healthy
+
+    environment:
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+
+      EUREKA_SERVER: ${EUREKA_SERVER}
+
+    ports:
+      - "8083:8083"
+
+    networks:
+      - notification-network
+
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+
+    container_name: api-gateway
+    restart: unless-stopped
+
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+
+    environment:
+      EUREKA_SERVER: ${EUREKA_SERVER}
+
+    ports:
+      - "8080:8080"
+
+    networks:
+      - notification-network
+
+
+networks:
+  notification-network:
+    driver: bridge
+
+
+volumes:
+  mysql-data:

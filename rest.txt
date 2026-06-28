@@ -1,0 +1,11 @@
+Step 1 — Add SpringDoc Dependency
+
+We need this dependency in every service that exposes REST APIs.
+
+That means:
+
+✅ User Service
+✅ Submission Service
+✅ Leaderboard Service
+❌ Eureka Server
+❌ API Gateway (we'll discuss this separately)
