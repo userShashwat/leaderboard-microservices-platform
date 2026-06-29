@@ -4,30 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cbca4059-6411-4ab8-a480-422523854bce" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/leaderboard-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/leaderboard-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/leaderboard-service/src/main/java/com/leaderboard/leaderboard_service/Controller/LeaderboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/leaderboard-service/src/main/java/com/leaderboard/leaderboard_service/Controller/LeaderboardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/leaderboard-service/src/main/java/com/leaderboard/leaderboard_service/Service/LeaderboardServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/leaderboard-service/src/main/java/com/leaderboard/leaderboard_service/Service/LeaderboardServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/leaderboard-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/leaderboard-service/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/submission-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/submission-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/submission-service/src/main/java/com/leaderboard/submissionservice/Exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/submission-service/src/main/java/com/leaderboard/submissionservice/Exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/submission-service/src/main/java/com/leaderboard/submissionservice/controller/ContestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/submission-service/src/main/java/com/leaderboard/submissionservice/controller/ContestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/submission-service/src/main/java/com/leaderboard/submissionservice/controller/ProblemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/submission-service/src/main/java/com/leaderboard/submissionservice/controller/ProblemController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/submission-service/src/main/java/com/leaderboard/submissionservice/controller/SubmissionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/submission-service/src/main/java/com/leaderboard/submissionservice/controller/SubmissionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/submission-service/src/main/java/com/leaderboard/submissionservice/dto/Request/CreateSubmissionRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/submission-service/src/main/java/com/leaderboard/submissionservice/dto/Request/CreateSubmissionRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/submission-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/submission-service/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userservice/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/userservice/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userservice/src/main/java/com/leaderboard/userservice/UserserviceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/userservice/src/main/java/com/leaderboard/userservice/UserserviceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userservice/src/main/java/com/leaderboard/userservice/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/userservice/src/main/java/com/leaderboard/userservice/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userservice/src/main/java/com/leaderboard/userservice/controller/TestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/userservice/src/main/java/com/leaderboard/userservice/controller/TestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userservice/src/main/java/com/leaderboard/userservice/dto/LoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/userservice/src/main/java/com/leaderboard/userservice/dto/LoginRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userservice/src/main/java/com/leaderboard/userservice/dto/RegisterRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/userservice/src/main/java/com/leaderboard/userservice/dto/RegisterRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userservice/src/main/java/com/leaderboard/userservice/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/userservice/src/main/java/com/leaderboard/userservice/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/userservice/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/userservice/src/main/resources/application.yaml" afterDir="false" />
-    </list>
+    <list default="true" id="cbca4059-6411-4ab8-a480-422523854bce" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

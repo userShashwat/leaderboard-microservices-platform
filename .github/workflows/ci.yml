@@ -1,0 +1,46 @@
+name: Java CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service:
+          - userservice
+          - submission-service
+          - leaderboard-service
+          - api-gateway
+          - eureka-server
+
+    defaults:
+      run:
+        working-directory: ${{ matrix.service }}
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+
+      - name: Build Project
+        run: mvn clean install
