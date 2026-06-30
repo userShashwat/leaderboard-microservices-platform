@@ -3,7 +3,6 @@ name: Leaderboard Management System CI
 on:
   push:
     branches: [ main ]
-
   pull_request:
     branches: [ main ]
 
@@ -12,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -23,37 +21,34 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-
-
-      - name: Build Eureka Server
+      - name: Build and Test Eureka Server
         working-directory: ./eureka-server
-        run: mvn clean package -DskipTests
+        run: mvn clean verify
 
-
-
-      - name: Build API Gateway
+      - name: Build and Test API Gateway
         working-directory: ./api-gateway
-        run: mvn clean package -DskipTests
+        run: mvn clean verify
 
-
-
-      - name: Build User Service
+      - name: Build and Test User Service
         working-directory: ./userservice
-        run: mvn clean package -DskipTests
+        run: mvn clean verify
 
-
-
-      - name: Build Submission Service
+      - name: Build and Test Submission Service
         working-directory: ./submission-service
-        run: mvn clean package -DskipTests
+        run: mvn clean verify
 
-
-
-      - name: Build Leaderboard Service
+      - name: Build and Test Leaderboard Service
         working-directory: ./leaderboard-service
-        run: mvn clean package -DskipTests
+        run: mvn clean verify
 
-
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            **/target/surefire-reports/
+            **/target/failsafe-reports/
 
       - name: Upload Eureka Server JAR
         uses: actions/upload-artifact@v4
@@ -85,15 +80,11 @@ jobs:
           name: leaderboard-service
           path: leaderboard-service/target/*.jar
 
-
       - name: Build Docker Images
         run: docker compose build
-
 
       - name: Validate Docker Compose
         run: docker compose config
 
-
-
       - name: CI Completed
-        run: echo "All services built successfully. Docker images verified."
+        run: echo "All services built, tested, and Docker images verified successfully."
