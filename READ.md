@@ -415,32 +415,6 @@ The project includes unit tests covering the service layer using:
 
 ---
 
-# 📷 Screenshots
-
-> Add screenshots of the following:
-
-- System Architecture
-- Swagger UI
-- Eureka Dashboard
-- Kafka Event Flow
-- Redis Leaderboard
-- Docker Containers
-- Application Demo
-
----
-
-# 🔮 Future Improvements
-
-- Integrate a real online code execution engine
-- Add refresh tokens for JWT authentication
-- Implement rate limiting
-- Add distributed tracing
-- Add CI/CD pipeline using GitHub Actions
-- Deploy to AWS using Docker
-- Add monitoring with Prometheus and Grafana
-
----
-
 # 👨‍💻 Author
 
 **Shashwat Sharma**
