@@ -5,17 +5,32 @@ on:
     branches:
       - main
       - master
-
   pull_request:
     branches:
       - main
       - master
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
+
+    services:
+      # Add MySQL service for integration tests
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: testdb
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+      # Add Redis for API Gateway tests
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     strategy:
       matrix:
@@ -31,7 +46,6 @@ jobs:
         working-directory: ${{ matrix.service }}
 
     steps:
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -42,5 +56,18 @@ jobs:
           java-version: 21
           cache: maven
 
-      - name: Build Project
+      - name: Build and Test with Maven
         run: mvn clean install
+        env:
+          # Use test profile for all services
+          SPRING_PROFILES_ACTIVE: test
+          # Database connection for tests
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/testdb
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: root
+          # Redis connection for API Gateway
+          SPRING_REDIS_HOST: localhost
+          SPRING_REDIS_PORT: 6379
+          # Disable Eureka for tests
+          EUREKA_CLIENT_ENABLED: false
+          SPRING_CLOUD_DISCOVERY_ENABLED: false
